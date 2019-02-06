@@ -5,7 +5,7 @@
                 <h1 class="text--secondary mb-3">My ad</h1>
                 <v-card 
                     class="elevation-10 mb-4"
-                    v-for="ad in ads"
+                    v-for="ad in myAds"
                     :key="ad.id"
                 >
                 <v-layout row>
@@ -37,31 +37,9 @@
 
 <script>
 export default {
-    data () {
-        return {
-            ads: [
-               {
-                    title: "image",
-                    description: "it is title",
-                    promo: false,
-                    imageSrc: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg",
-                    id: "123"
-                },
-                {
-                    title: "second image",
-                    description: "it is title",
-                    promo: true,
-                    imageSrc: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg",
-                    id: "1234"
-                },
-                {
-                    title: "third image",
-                    description: "it is title",
-                    promo: true,
-                    imageSrc: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg",
-                    id: "12345"
-                } 
-            ]
+    computed: {
+        myAds () {
+            return this.$store.getters.myAds
         }
     }
 }

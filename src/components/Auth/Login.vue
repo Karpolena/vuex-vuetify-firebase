@@ -78,7 +78,7 @@ export default {
                     .then (() => {
                         this.$router.push("/")
                     })
-                    .cath (err => console.log(err))
+                    // .cath (() => {})
             }
         }
         

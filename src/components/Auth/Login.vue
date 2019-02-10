@@ -67,6 +67,11 @@ export default {
             return this.$store.getters.loading
         }
     },
+    created() {
+        if (this.$route.query['loginError']) {
+            this.$store.dispatch('setError', 'Please log in to access this page')
+        }
+    },
     methods: {
         onSubmit() {
             if (this.$refs.form.validate()) {

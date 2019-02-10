@@ -23,6 +23,11 @@ new Vue({
       projectId: "itc-ads-e509f",
       storageBucket: "itc-ads-e509f.appspot.com",
       messagingSenderId: "478746383652"
+    }),
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.$store.dispatch("autoLoginUser", user)
+      }
     })
   },
  render: h => h(App)

@@ -52,7 +52,8 @@
                         <v-btn 
                             class="success"
                             @click="createAd"
-                            :disabled="!valid">
+                            :disabled="!valid || loading"
+                            :loading="loading">
                             Create ad
                         </v-btn>
                     </v-flex>
@@ -78,11 +79,20 @@ export default {
                 const ad = {
                     title: this.title,
                     description: this.description,
-                    promo: this.promo,
-                    imageSrc: "https://cdn-images-1.medium.com/max/1200/1*-8AAdexfOAK9R-AIha_PBQ.png"
+                    imageSrc: "https://cdn-images-1.medium.com/max/1200/1*-8AAdexfOAK9R-AIha_PBQ.png",
+                    promo: this.promo
                 }
                 this.$store.dispatch("createAd", ad)
+                .then(() => {
+                    this.$router.push("/list")
+                })
+                // .cath(() => {})
             }
+        }
+    },
+    computed: {
+        loading() {
+            return this.$store.getters.loading
         }
     }
 }

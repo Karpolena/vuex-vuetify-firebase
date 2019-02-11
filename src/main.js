@@ -5,6 +5,7 @@ import store from "@/store"
 import Vuetify from "vuetify"
 import * as firebase from 'firebase/app'
 import 'firebase/auth'
+import 'firebase/database'
 import "vuetify/dist/vuetify.min.css"
 
 Vue.use(Vuetify)

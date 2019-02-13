@@ -1,6 +1,6 @@
 
-import * as firebase from 'firebase/app';
-import 'firebase/auth';
+import  firebase from '@firebase/app';
+import '@firebase/auth';
 
 class User {
     construstor (id) {
@@ -8,7 +8,8 @@ class User {
     }
 }
 
-export default {    
+export default { 
+       
     state: {
         user: null
     },
@@ -22,7 +23,7 @@ export default {
             commit ("clearError")
             commit ("setLoading", true)
             try {
-                const user = await firebase.auth().createUserWithEmailAndPassword(email, password)
+                const user = await firebase.auth().createUserWithEmailAndPassword(email, password)                
                 commit ("setUser", new User(user.uid))
                 commit ("setLoading", false)
             } catch (error) {

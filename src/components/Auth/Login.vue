@@ -18,7 +18,7 @@
                         type="email"
                         v-model="email"
                         :rules="emailRules"
-                        ></v-text-field>
+                    ></v-text-field>
                     <v-text-field 
                         prepend-icon="lock" 
                         name="password" 
@@ -27,7 +27,7 @@
                         v-model="password"
                         :counter="6"
                         :rules="passwordRules"
-                        ></v-text-field>
+                    ></v-text-field>
                 </v-form>
                 </v-card-text>
                 <v-card-actions>

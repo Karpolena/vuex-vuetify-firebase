@@ -56,7 +56,7 @@
             <v-layout row>
                 <v-flex xs12 class="text-xs-center">
                     <v-progress-circular
-                        :size="70"
+                        :size="30"
                         :width="7"
                         color="purple"
                         indeterminate

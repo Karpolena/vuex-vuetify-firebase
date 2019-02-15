@@ -1,13 +1,14 @@
 
-import  firebase from '@firebase/app';
-import '@firebase/database';
+import  firebase from 'firebase/app';
+import 'firebase/database';
 class Ad {
-    constructor (title, description,  promo=false, imageSrc="", id=null) {
+    constructor (title, description,  promo=false, imageSrc, id=null) {
         this.title = title
         this.description = description
         this.promo = promo
         this.imageSrc = imageSrc        
         this.id = id
+
     }
 }
 export default {
@@ -45,22 +46,31 @@ export default {
         }
     },
     actions: {
-            async createAd({commit}, payload) {
+            async createAd({commit, getters}, payload) {
                 commit("clearError")
                 commit("setLoading", true)
+                const image = payload.image
                 try {
                     const newAd = new Ad (
                         payload.title,
                         payload.description,
                         payload.promo,
-                        payload.imageSrc
-                        
+                        "",
+                        getters.user.id                        
                     )
                     const ad = await firebase.database().ref("ads").push(newAd)
+                    const imageExt = image.name.slice(image.name.lastIndexOf("."))
+
+                    const fileData = await firebase.storage().ref(`ads/${ad.key}.${imageExt}`).put(image)
+                    // const imageSrc = fileData.metadata.downloadURLs[0] 
+                    const imageSrc = await fileData.ref.getDownloadURL() 
+
+                    await firebase.database().ref('ads').child(ad.key).update({imageSrc})
                     commit("setLoading", false)
                     commit("createAd", {
                         ...newAd,
-                        id: ad.key
+                        id: ad.key,
+                        imageSrc
                     })
                 } catch (error) {
                     commit("setError", error.message)

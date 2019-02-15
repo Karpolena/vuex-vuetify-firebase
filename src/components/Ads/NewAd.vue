@@ -26,15 +26,20 @@
                 </v-form>
                 <v-layout row>
                     <v-flex xs12 mb-3>
-                        <v-btn class="warning">
+                        <v-btn class="warning" @click="triggerUpload">
                             Upload
                             <v-icon right dark>cloud_upload</v-icon>
                         </v-btn>
+                        <input type="file" style="display: none;" accept="image/*" ref="fileInput" @change="onFileChange">
                     </v-flex>
                 </v-layout>
                 <v-layout row>
                     <v-flex xs12 >
-                        <img src="https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg" alt="squirel" height="120">
+                        <img 
+                            :src="imageSrc" 
+                            alt="squirel" 
+                            height="120"
+                            v-if="imageSrc">
                     </v-flex>
                 </v-layout>
                 <v-layout row>
@@ -52,7 +57,7 @@
                         <v-btn 
                             class="success"
                             @click="createAd"
-                            :disabled="!valid || loading"
+                            :disabled="!valid || loading || !image"
                             :loading="loading">
                             Create ad
                         </v-btn>
@@ -70,16 +75,18 @@ export default {
             title: "",
             description: "",
             promo: "",
-            valid: false
+            valid: false,
+            image: null,
+            imageSrc: ""
         }
     },
     methods: {
         createAd() {
-            if (this.$refs.form.validate()) {
+            if (this.$refs.form.validate() && this.image) {
                 const ad = {
                     title: this.title,
                     description: this.description,
-                    imageSrc: "https://cdn-images-1.medium.com/max/1200/1*-8AAdexfOAK9R-AIha_PBQ.png",
+                    image: this.image,
                     promo: this.promo
                 }
                 this.$store.dispatch("createAd", ad)
@@ -88,6 +95,18 @@ export default {
                 })
                 // .cath(() => {})
             }
+        },
+        triggerUpload() {
+            this.$refs.fileInput.click()
+        },
+        onFileChange(event) {
+            const file = event.target.files[0]
+            const reader = new FileReader()
+            reader.onload = event => {
+                this.imageSrc = reader.result
+            }
+            reader.readAsDataURL(file)
+            this.image = file
         }
     },
     computed: {

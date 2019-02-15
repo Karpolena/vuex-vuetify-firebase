@@ -10,10 +10,10 @@
                 >
                 <v-layout row>
                     <v-flex xs4>
-                        <v-card-media
+                        <v-img
                             :src="ad.imageSrc"
                             height="160"
-                        ></v-card-media>
+                        ></v-img>
                     </v-flex>
                     <v-flex xs8>
                         <v-card-text>

@@ -1,12 +1,13 @@
 
-import  firebase from 'firebase/app';
+import * as firebase from 'firebase/app';
 import 'firebase/database';
 class Ad {
-    constructor (title, description,  promo=false, imageSrc, id=null) {
+    constructor (title, description,  promo=false, imageSrc, ownerId, id=null) {
         this.title = title
         this.description = description
         this.promo = promo
-        this.imageSrc = imageSrc        
+        this.imageSrc = imageSrc
+        this.ownerId = ownerId
         this.id = id
 
     }
@@ -43,6 +44,13 @@ export default {
         },
         loadAds (state, payload) {
             state.ads = payload
+        },
+        updateAd (state, {title, description, id}) {
+            const ad = state.ads.find(a => {
+                return a.id === id
+            })
+            ad.title = title
+            ad.description = description
         }
     },
     actions: {
@@ -62,7 +70,6 @@ export default {
                     const imageExt = image.name.slice(image.name.lastIndexOf("."))
 
                     const fileData = await firebase.storage().ref(`ads/${ad.key}.${imageExt}`).put(image)
-                    // const imageSrc = fileData.metadata.downloadURLs[0] 
                     const imageSrc = await fileData.ref.getDownloadURL() 
 
                     await firebase.database().ref('ads').child(ad.key).update({imageSrc})
@@ -96,7 +103,28 @@ export default {
                     commit ("setLoading", false)
                     throw error
                 }
-            }            
+            },
+            async updateAd ({commit}, {title, description, id}) {
+                commit('clearError')
+                commit('setLoading', true)
+                try {
+                    await firebase.database().ref('ads').child(id).update({
+                        title,
+                        description
+                    })
+                    commit('updateAd', {
+                        title, 
+                        description,
+                        id
+                    })
+                    commit('setLoading', false)
+                }
+                catch (error) {
+                    commit('setError', error.message)
+                    commit('setLoading', false)
+                    throw error
+                }
+            }           
         },
     getters: {
         ads (state) {
@@ -107,8 +135,10 @@ export default {
                 return ad.promo
             })
         },
-        myAds (state) {
-            return state.ads
+        myAds (state, getters) {
+            return state.ads.filter(ad => {
+                return ad.ownerId === getters.user.id
+            })
         },
         adById(state) {
             return adId => {

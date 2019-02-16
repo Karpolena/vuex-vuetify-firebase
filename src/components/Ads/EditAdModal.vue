@@ -1,5 +1,5 @@
 <template>
-    <v-dialog width="400px" v-modal="model">
+    <v-dialog width="400px" v-model="modal">
         <v-btn class="warning" flat slot="activator">Edit</v-btn>
         <v-card>
             <v-container>
@@ -47,7 +47,7 @@ export default {
     props: ["ad"],
     data() {
         return {
-            model: false,
+            modal: false,
             editedDescription: this.ad.description,
             editedTitle: this.ad.title
         }
@@ -56,7 +56,7 @@ export default {
         onCancel () {
             this.editedDescription = this.ad.description,
             this.editedTitle = this.ad.title,
-            this.model = false
+            this.modal = false
         },
         onSave () {
             if (this.editedDescription !== "" && this.editedTitle !== "") {

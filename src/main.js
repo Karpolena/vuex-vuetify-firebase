@@ -21,6 +21,11 @@ new Vue({
   created () {
     firebase.initializeApp(firebaseConfig)
     this.$store.dispatch('fetchAds')
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.$store.dispatch("autoLoginUser", user)
+      }
+    })
   },
  render: h => h(App)
 })

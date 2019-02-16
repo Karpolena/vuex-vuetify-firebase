@@ -1,5 +1,5 @@
 
-import  firebase from 'firebase/app';
+import  * as firebase from 'firebase/app';
 import 'firebase/auth';
 
 class User {
@@ -25,6 +25,7 @@ export default {
             try {
                 const user = await firebase.auth().createUserWithEmailAndPassword(email, password)                
                 commit ("setUser", new User(user.uid))
+                // console.log(user.uid)edi
                 commit ("setLoading", false)
             } catch (error) {
                 commit ("setLoading", false)

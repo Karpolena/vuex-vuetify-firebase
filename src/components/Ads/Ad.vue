@@ -39,6 +39,9 @@ export default {
         },
         loading () {
             return this.$store.getters.loading
+        },
+        isOwner () {
+            return this.ad.ownerId === this.$store.getters.user.id
         }
     },
     components: {
